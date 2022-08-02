@@ -1,2 +1,1 @@
-# desafio
-Desafio Api de votação de associados
+# Desafio Api de votação de associados
