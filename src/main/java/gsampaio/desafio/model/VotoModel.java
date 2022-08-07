@@ -1,28 +1,28 @@
 package gsampaio.desafio.model;
 
 import gsampaio.desafio.utils.TipoVoto;
-import gsampaio.desafio.utils.VotoId;
+import gsampaio.desafio.utils.VotoPK;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 
-@Setter
-@Getter
+@Getter @Setter
 @Entity(name = "tb_voto")
 public class VotoModel {
 
     @EmbeddedId
-    private VotoId id;
+    private VotoPK id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("associadoId")
+    @ManyToOne
+    @JoinColumn(name = "associadoId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     private AssociadoModel associado;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("pautaId")
+    @ManyToOne
+    @JoinColumn(name = "pautaId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     private PautaModel pauta;
 
+    @Column
     private TipoVoto tipoVoto;
 
 }

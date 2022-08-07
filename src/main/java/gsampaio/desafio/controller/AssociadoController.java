@@ -1,7 +1,13 @@
 package gsampaio.desafio.controller;
 
 import gsampaio.desafio.model.AssociadoModel;
+import gsampaio.desafio.model.PautaModel;
+import gsampaio.desafio.model.VotoModel;
 import gsampaio.desafio.repository.AssociadoRepository;
+import gsampaio.desafio.repository.PautaRepository;
+import gsampaio.desafio.repository.VotoRepository;
+import gsampaio.desafio.utils.TipoVoto;
+import gsampaio.desafio.utils.VotoPK;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +18,16 @@ import java.util.*;
 public class AssociadoController {
     @Autowired
     private AssociadoRepository associadoRepository;
+    @Autowired
+    private PautaRepository pautaRepository;
+
+    @Autowired
+    private VotoRepository votoRepository;
 
     @GetMapping(path = "/api/associado/{cpf}")
     public ResponseEntity getAssociado(@PathVariable("cpf") String cpf){
-        if(!validaCpf(cpf))
-            return ResponseEntity.badRequest().body("CPF informado está no formato inválido");
+        validaCpf(cpf);
+
 
         if(Objects.isNull(associadoRepository.findByCpf(cpf)))
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("CPF não encontrado");
@@ -27,8 +38,8 @@ public class AssociadoController {
     @PostMapping(path = "/api/associado/")
     public ResponseEntity postAssociado(@RequestBody AssociadoModel associado){
         AssociadoModel AssociadoCriado;
-        if(!validaCpf(associado.getCpf()))
-            return ResponseEntity.badRequest().body("CPF informado está no formato inválido");
+        validaCpf(associado.getCpf());
+
         try{
             AssociadoCriado = associadoRepository.save(associado);
         } catch (Exception e){
@@ -37,8 +48,50 @@ public class AssociadoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(AssociadoCriado);
     }
 
-    private boolean validaCpf(String cpf){
-        cpf = cpf.replaceAll("[^0-9]", ""); //Makes CPF numeric only
-        return cpf.length() == 11;
+    @PostMapping(path = "/api/associado/voto/{nomePauta}/{cpf}/{tipoVoto}")
+    public ResponseEntity votar(@PathVariable("nomePauta") String nomePauta, @PathVariable("cpf") String cpf, @PathVariable("tipoVoto") String tipoVoto){
+        validaCpf(cpf);
+        PautaModel pauta;
+        AssociadoModel associado;
+        VotoModel voto = new VotoModel();
+
+        if(tipoVoto.equals("Sim"))
+            voto.setTipoVoto(TipoVoto.SIM);
+        else if (tipoVoto.equals("Não"))
+            voto.setTipoVoto(TipoVoto.NAO);
+        else
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro: Tipo de voto inválido. [Tipos suportados são: 'Sim', 'Não']");
+
+
+        try {
+            pauta = pautaRepository.findByNome(nomePauta);
+            if(Objects.isNull(pauta))
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro: Pauta não encontrada");
+
+            associado = associadoRepository.findByCpf(cpf);
+            if(Objects.isNull(associado))
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro: Associado não encontrado");
+
+            if(Objects.nonNull(votoRepository.findByAssociadoAndPauta(associado, pauta)))
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro: você já votou nessa pauta");
+
+            voto.setId(new VotoPK(associado.getId(), pauta.getId()));
+            voto.setAssociado(associado);
+            voto.setPauta(pauta);
+            votoRepository.save(voto);
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro: Verifique os dados enviados");
+        }
+
+        return ResponseEntity.ok("Voto cadastrado com sucesso");
+
+    };
+
+    private ResponseEntity validaCpf(String cpf){
+        if(cpf.replaceAll("[^0-9]", "").length() != 11)
+            return ResponseEntity.badRequest().body("CPF informado está no formato inválido");
+        return null;
     }
 }

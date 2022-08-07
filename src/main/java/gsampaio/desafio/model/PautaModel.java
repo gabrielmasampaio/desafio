@@ -7,8 +7,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
-@Setter
-@Getter
+@Setter @Getter
 @Entity(name = "tb_pauta")
 public class PautaModel {
 
@@ -30,6 +29,4 @@ public class PautaModel {
     @Enumerated(EnumType.STRING)
     @Column(name = "situacao")
     private SituacaoEnum situacaoEnum;
-
-
 }

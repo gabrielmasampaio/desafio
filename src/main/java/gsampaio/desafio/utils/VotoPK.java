@@ -1,24 +1,27 @@
 package gsampaio.desafio.utils;
 
+
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Setter
-@Getter
+@Getter @Setter
 @Embeddable
-public class VotoId implements Serializable {
+public class VotoPK implements Serializable {
 
+    @Column(name = "associadoId", nullable = false)
     private Integer associadoId;
 
+    @Column(name = "pautaId", nullable = false)
     private Integer pautaId;
 
-    public VotoId() {}
+    public VotoPK() {}
 
-    public VotoId(Integer associadoId, Integer pautaId) {
+    public VotoPK(Integer associadoId, Integer pautaId) {
         this.associadoId = associadoId;
         this.pautaId = pautaId;
     }
@@ -28,10 +31,10 @@ public class VotoId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        VotoId votoId = (VotoId) o;
+        VotoPK votoPK = (VotoPK) o;
 
-        if (!Objects.equals(associadoId, votoId.associadoId)) return false;
-        return Objects.equals(pautaId, votoId.pautaId);
+        if (!Objects.equals(associadoId, votoPK.associadoId)) return false;
+        return Objects.equals(pautaId, votoPK.pautaId);
     }
 
     @Override

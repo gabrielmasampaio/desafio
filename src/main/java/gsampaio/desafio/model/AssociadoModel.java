@@ -4,11 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.Constraint;
 import javax.validation.constraints.NotBlank;
+import java.util.HashSet;
+import java.util.Set;
 
-@Setter
-@Getter
+@Setter @Getter
 @Entity(name = "tb_associado")
 public class AssociadoModel {
 

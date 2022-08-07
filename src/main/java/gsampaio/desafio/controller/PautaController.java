@@ -13,6 +13,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
+/*
+    TODO: Adicionar tempo de votação na requisição e na lógica
+    TODO: Contabilizar os votos
+    TODO: ADICIONAR SWAGGER
+    TODO: Refatorar controllers (adicionar service?)
+    ** EXTRA **
+    TODO: - VINCULAR CHAMADA DE API HEROKUAPP
+ */
 @RestController
 public class PautaController {
 
@@ -40,7 +48,7 @@ public class PautaController {
             pauta = pautaRepository.findByNome(nomePauta);
             if(Objects.isNull(pauta))
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro: Pauta não encontrada");
-            pauta.setSituacaoEnum(SituacaoEnum.EM_VOTACAO);
+            pauta.setSituacaoEnum(SituacaoEnum.VOTACAO_ABERTA);
             pautaRepository.save(pauta);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro: Verifique os dados enviados");
@@ -49,4 +57,19 @@ public class PautaController {
         return ResponseEntity.status(HttpStatus.OK).body("Pauta '" + pauta.getNome() + "' alterada com sucesso. Situação: " + pauta.getSituacaoEnum());
     }
 
+    @GetMapping("/api/pauta/contabilizar/{nome}")
+    public ResponseEntity contabilizaVotacao(@PathVariable("nome") String nomePauta){
+        PautaModel pauta;
+
+        try {
+            pauta = pautaRepository.findByNome(nomePauta);
+            if(Objects.isNull(pauta))
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro: Pauta não encontrada");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro: Verifique os dados enviados");
+        }
+
+        return null;
+    }
 }
