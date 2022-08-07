@@ -5,8 +5,8 @@ import org.springframework.data.repository.Repository;
 
 public interface AssociadoRepository extends Repository<Associado, Integer> {
 
-    public Associado findByCpf(String cpf);
+  Associado findByCpf(String cpf);
 
-    public Associado save(Associado associado);
+  Associado save(Associado associado);
 
 }

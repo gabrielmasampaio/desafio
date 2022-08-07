@@ -5,8 +5,8 @@ import org.springframework.data.repository.Repository;
 
 public interface PautaRepository extends Repository<Pauta, Integer> {
 
-    public Pauta findByNome(String nome);
+  Pauta findByNome(String nome);
 
-    public Pauta save(Pauta pauta);
+  Pauta save(Pauta pauta);
 
 }

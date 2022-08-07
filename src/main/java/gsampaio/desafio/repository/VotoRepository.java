@@ -8,8 +8,8 @@ import org.springframework.data.repository.Repository;
 
 public interface VotoRepository extends Repository<Voto, VotoPK> {
 
-    public Voto save(Voto voto);
+  Voto save(Voto voto);
 
-    public Integer countByPautaAndTipoVoto(Pauta pauta, TipoVoto tipoVoto);
+  Integer countByPautaAndTipoVoto(Pauta pauta, TipoVoto tipoVoto);
 
 }
