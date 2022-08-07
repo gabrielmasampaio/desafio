@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Service
 public class PautaService {
@@ -41,7 +43,7 @@ public class PautaService {
         return pauta;
     }
 
-    public Pauta iniciarVotacao(String nomePauta){
+    public Pauta iniciarVotacao(String nomePauta, Integer tempoSessao){
         Pauta pauta = buscaPauta(nomePauta);
         try {
             pauta.setSituacaoEnum(SituacaoEnum.VOTACAO_ABERTA);
@@ -49,6 +51,8 @@ public class PautaService {
         } catch (Exception e) {
             throw new RuntimeException("Erro: erro ao salvar a situacao da pauta");
         }
+        Timer timer = new Timer("Timer");
+        timer.schedule(new EncerraVotacaoTask(pauta), Objects.isNull(tempoSessao) ? (60 * 1000) : (tempoSessao * 60 *1000));
         return pauta;
     }
 
@@ -68,4 +72,18 @@ public class PautaService {
             throw new RuntimeException("Erro: nome da pauta não pode ultrapassar 50 caracteres");
     }
 
+    private class EncerraVotacaoTask extends TimerTask {
+
+        Pauta pauta;
+
+        EncerraVotacaoTask(Pauta pauta){
+            this.pauta = pauta;
+        }
+
+        @Override
+        public void run() {
+            this.pauta.setSituacaoEnum(SituacaoEnum.VOTACAO_ENCERRADA);
+            pautaRepository.save(pauta);
+        }
+    }
 }

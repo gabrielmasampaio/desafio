@@ -5,6 +5,7 @@ import gsampaio.desafio.service.PautaService;
 import gsampaio.desafio.service.VotoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,10 +29,10 @@ public class PautaController {
     }
 
     @PutMapping("/api/pauta/{nome}")
-    public ResponseEntity iniciarVotacao(@PathVariable("nome") String nomePauta){
+    public ResponseEntity iniciarVotacao(@PathVariable("nome") String nomePauta, @Param("tempoSessao") Integer tempoSessao){
         Pauta pauta;
         try {
-           pauta = pautaService.iniciarVotacao(nomePauta);
+           pauta = pautaService.iniciarVotacao(nomePauta, tempoSessao);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
