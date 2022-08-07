@@ -9,18 +9,18 @@ import javax.persistence.*;
 
 @Getter @Setter
 @Entity(name = "tb_voto")
-public class VotoModel {
+public class Voto {
 
     @EmbeddedId
     private VotoPK id;
 
     @ManyToOne
     @JoinColumn(name = "associadoId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
-    private AssociadoModel associado;
+    private Associado associado;
 
     @ManyToOne
     @JoinColumn(name = "pautaId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
-    private PautaModel pauta;
+    private Pauta pauta;
 
     @Column
     private TipoVoto tipoVoto;

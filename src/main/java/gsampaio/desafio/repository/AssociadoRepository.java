@@ -1,12 +1,12 @@
 package gsampaio.desafio.repository;
 
-import gsampaio.desafio.model.AssociadoModel;
+import gsampaio.desafio.model.Associado;
 import org.springframework.data.repository.Repository;
 
-public interface AssociadoRepository extends Repository<AssociadoModel, Integer> {
+public interface AssociadoRepository extends Repository<Associado, Integer> {
 
-    public AssociadoModel findByCpf(String cpf);
+    public Associado findByCpf(String cpf);
 
-    public AssociadoModel save(AssociadoModel associado);
+    public Associado save(Associado associado);
 
 }

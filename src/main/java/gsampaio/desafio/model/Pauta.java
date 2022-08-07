@@ -5,18 +5,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 @Setter @Getter
 @Entity(name = "tb_pauta")
-public class PautaModel {
+public class Pauta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
-    @NotBlank(message = "Nome da pauta é obrigatório")
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 50, unique = true)
     private String nome;
 
     @Column(nullable = false)
@@ -24,7 +22,7 @@ public class PautaModel {
 
     @ManyToOne
     @JoinColumn(name = "autorId", nullable = false)
-    private AssociadoModel associado;
+    private Associado associado;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "situacao")

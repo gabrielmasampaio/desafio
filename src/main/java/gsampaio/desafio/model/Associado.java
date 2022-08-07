@@ -5,12 +5,10 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.HashSet;
-import java.util.Set;
 
 @Setter @Getter
 @Entity(name = "tb_associado")
-public class AssociadoModel {
+public class Associado {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

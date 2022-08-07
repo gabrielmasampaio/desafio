@@ -1,13 +1,12 @@
 package gsampaio.desafio.repository;
 
-import gsampaio.desafio.model.PautaModel;
-import gsampaio.desafio.model.VotoModel;
+import gsampaio.desafio.model.Pauta;
 import org.springframework.data.repository.Repository;
 
-public interface PautaRepository extends Repository<PautaModel, Integer> {
+public interface PautaRepository extends Repository<Pauta, Integer> {
 
-    public PautaModel findByNome(String nome);
+    public Pauta findByNome(String nome);
 
-    public PautaModel save(PautaModel pauta);
+    public Pauta save(Pauta pauta);
 
 }
